@@ -12,9 +12,10 @@
                 x:Name="UrlEntry"
                 Placeholder="Enter Youtube URL"/>
 
-            <Grid ColumnDefinitions="*, Auto"
-                  ColumnSpacing="10"
-                  VerticalOptions="Center">
+            <Grid
+                ColumnDefinitions="*, Auto"
+                ColumnSpacing="10"
+                VerticalOptions="Center">
                 <!-- Entry занимает всю оставшуюся ширину -->
                 <Entry Grid.Column="0"
                        x:Name="SavePathEntry"
