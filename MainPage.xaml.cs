@@ -6,7 +6,7 @@ using CommunityToolkit.Maui.Storage;
 public partial class MainPage : ContentPage
 {
 
-	private readonly ObservableCollection<string> _logItems = new ObservableCollection<string>();
+	private readonly ObservableCollection<string> _logItems = new();
 
 	public MainPage()
 	{
@@ -41,7 +41,7 @@ public partial class MainPage : ContentPage
 
 	private async void StartDownload(string url, string savePath)
 	{
-		var arguments = new string[]
+		var arguments = new List<string>
 		{
 			"-t", "mp4",
 			url,
@@ -56,7 +56,7 @@ public partial class MainPage : ContentPage
 
 		var ytdlpPath = Path.Combine([exeDirectory, "ytdlp_bin", "yt-dlp.exe"]);
 
-		AppendLog($"Using yt-dlp executable at: {ytdlpPath}");
+		AppendLog($"Running yt-dlp executable at: '{ytdlpPath}' with arguments: '{string.Join(" ", arguments)}'");
 
 		try
 		{
@@ -75,6 +75,28 @@ public partial class MainPage : ContentPage
 			AppendLog($"Error: {ex.Message}");
 			await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
 		}
+		finally
+		{
+			ToggleActivityIndicatorVisible(false);
+			SetDownloadButtonEnabled(true);
+		}
+	}
+
+	private void ToggleActivityIndicatorVisible(bool isActive)
+	{
+		MainThread.BeginInvokeOnMainThread(() =>
+		{
+			DownloadActivityIndicator.IsRunning = isActive;
+			DownloadActivityIndicator.IsVisible = isActive;
+		});
+	}
+
+	private void SetDownloadButtonEnabled(bool isEnabled)
+	{
+		MainThread.BeginInvokeOnMainThread(() =>
+		{
+			DownloadBtn.IsEnabled = isEnabled;
+		});
 	}
 
 	private void OnStartDownloadClicked(object sender, EventArgs e)
@@ -87,6 +109,10 @@ public partial class MainPage : ContentPage
 		SaveSettings();
 
 		AppendLog($"Starting download for URL: {UrlEntry.Text}");
+
+		ToggleActivityIndicatorVisible(true);
+
+		SetDownloadButtonEnabled(false);
 
 		StartDownload(UrlEntry.Text, SavePathEntry.Text);
 	}

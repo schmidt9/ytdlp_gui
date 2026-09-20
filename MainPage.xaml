@@ -10,7 +10,7 @@
 
         <!-- Верхняя часть: Поля ввода и кнопка (оборачиваем в StackLayout, чтобы они шли друг за другом) -->
         <VerticalStackLayout Grid.Row="0"
-                Spacing="25">
+                             Spacing="25">
             <Entry
                 x:Name="UrlEntry"
                 Placeholder="Enter Youtube URL"/>
@@ -32,12 +32,24 @@
                         HorizontalOptions="End"/>
             </Grid>
 
-            <Button
-                x:Name="DownloadBtn"
-                Text="Download"
-                SemanticProperties.Hint="Start the download process"
-                Clicked="OnStartDownloadClicked"
-                HorizontalOptions="Start"/>
+            <HorizontalStackLayout
+                Spacing="10">
+
+                <Button
+                    x:Name="DownloadBtn"
+                    Text="Download"
+                    SemanticProperties.Hint="Start the download process"
+                    Clicked="OnStartDownloadClicked"
+                    HorizontalOptions="Start"/>
+                
+                <ActivityIndicator
+                    x:Name="DownloadActivityIndicator"
+                    IsRunning="False"
+                    IsVisible="False"
+                    HorizontalOptions="Center"/>
+
+            </HorizontalStackLayout>
+
         </VerticalStackLayout>
 
         <!-- Нижняя часть (занимает всё оставшееся место '*'): Теперь ListView имеет границы и скроллится! -->
