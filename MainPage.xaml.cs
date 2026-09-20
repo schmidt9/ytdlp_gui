@@ -23,6 +23,18 @@ public partial class MainPage : ContentPage
 		AppSettings.SavePath = SavePathEntry.Text;
 	}
 
+	private void AppendLog(string message)
+	{
+		LogListView.ItemsSource ??= new List<string>();
+		var logList = (List<string>)LogListView.ItemsSource;
+
+		var messageWithTimestamp = $"[{DateTime.Now:HH:mm:ss}] {message}";
+		logList.Add(messageWithTimestamp);
+
+		LogListView.ItemsSource = null; // Reset the ItemsSource to refresh the ListView
+		LogListView.ItemsSource = logList; // Reassign the updated list
+	}
+
 	private void OnStartDownloadClicked(object sender, EventArgs e)
 	{
 		if (!ValidateUrlEntry() || !ValidateSavePathEntry())
@@ -31,6 +43,8 @@ public partial class MainPage : ContentPage
 		}
 
 		SaveSettings();
+
+		AppendLog($"Starting download for URL: {UrlEntry.Text}");
 	}
 
 	private void OnSelectSavePathClicked(object sender, EventArgs e)
@@ -74,6 +88,8 @@ public partial class MainPage : ContentPage
             var folderPath = result.Folder.Path;
 
 			SavePathEntry.Text = folderPath;
+
+			AppendLog($"Selected folder: {folderPath}");
 
 			SaveSettings();
 		}

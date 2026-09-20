@@ -37,6 +37,9 @@
                 SemanticProperties.Hint="Start the download process"
                 Clicked="OnStartDownloadClicked"
                 HorizontalOptions="Start"/>
+
+            <ListView
+                x:Name="LogListView"/>
         </VerticalStackLayout>
     </ScrollView>
 
