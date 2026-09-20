@@ -1,5 +1,7 @@
 ﻿namespace ytdlp_gui;
 
+using CommunityToolkit.Maui.Storage;
+
 public partial class MainPage : ContentPage
 {
 
@@ -14,8 +16,6 @@ public partial class MainPage : ContentPage
 		{
 			return;
 		}
-
-
 	}
 
 	private void OnSelectSavePathClicked(object sender, EventArgs e)
@@ -47,21 +47,20 @@ public partial class MainPage : ContentPage
 
 	async void SelectSavePath()
 	{
-		try
-		{
-			var result = await FilePicker.Default.PickAsync();
-			if (result != null)
-			{
-				string fileName = result.FileName;
-				string fullPath = result.FullPath; // Путь к файлу (на некоторых ОС может быть виртуальным URI)
+		var source = new CancellationTokenSource();
 
-				SavePathEntry.Text = fullPath; // Устанавливаем путь в Entry
-			}
-		}
-		catch (Exception ex)
-		{
-			await DisplayAlert("Error", $"An error occurred while picking a file: {ex.Message}", "OK");
-		}
+		var folderPicker = Handler?.MauiContext?.Services.GetService<IFolderPicker>();
+		if (folderPicker == null) return;
+
+        var result = await folderPicker.PickAsync(source.Token);
+
+        if (result.IsSuccessful)
+        {
+            // Путь к выбранной папке
+            var folderPath = result.Folder.Path;
+
+			SavePathEntry.Text = folderPath; // Устанавливаем путь в Entry
+        }
 	}
 }
 
