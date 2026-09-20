@@ -184,11 +184,9 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
     </Style>
 
-    <Style TargetType="Label" x:Key="Headline">
+    <Style TargetType="Label" x:Key="Simple">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
-        <Setter Property="FontSize" Value="32" />
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="16" />
     </Style>
 
     <Style TargetType="Label" x:Key="SubHeadline">
