@@ -10,15 +10,32 @@
 
             <Entry
                 x:Name="UrlEntry"
-                Placeholder="Enter Youtube URL"
-                />
+                Placeholder="Enter Youtube URL"/>
+
+            <Grid ColumnDefinitions="*, Auto"
+                  ColumnSpacing="10"
+                  VerticalOptions="Center">
+                <!-- Entry занимает всю оставшуюся ширину -->
+                <Entry Grid.Column="0"
+                       x:Name="SavePathEntry"
+                       Placeholder="Enter Save Path"
+                       HorizontalOptions="Fill"/>
+
+                <!-- Button занимает ровно столько места, сколько нужно для текста -->
+                <Button Grid.Column="1"
+                        x:Name="SelectSavePathBtn"
+                        Text="..."
+                        SemanticProperties.Hint="Select a save path for the downloaded file"
+                        Clicked="OnSelectSavePathClicked"
+                        HorizontalOptions="End"/>
+            </Grid>
 
             <Button
                 x:Name="DownloadBtn"
-                Text="Download" 
+                Text="Download"
                 SemanticProperties.Hint="Start the download process"
                 Clicked="OnStartDownloadClicked"
-                HorizontalOptions="Start" />
+                HorizontalOptions="Start"/>
         </VerticalStackLayout>
     </ScrollView>
 
