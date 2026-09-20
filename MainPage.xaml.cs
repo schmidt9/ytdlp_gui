@@ -1,9 +1,12 @@
 ﻿namespace ytdlp_gui;
 
+using System.Collections.ObjectModel;
 using CommunityToolkit.Maui.Storage;
 
 public partial class MainPage : ContentPage
 {
+
+	private readonly ObservableCollection<string> _logItems = new ObservableCollection<string>();
 
 	public MainPage()
 	{
@@ -15,6 +18,7 @@ public partial class MainPage : ContentPage
 	{
 		UrlEntry.Text = AppSettings.URL;
 		SavePathEntry.Text = AppSettings.SavePath;
+		LogListView.ItemsSource = _logItems;
 	}
 
 	private void SaveSettings()
@@ -27,20 +31,22 @@ public partial class MainPage : ContentPage
 	{
 		MainThread.BeginInvokeOnMainThread(() =>
 		{
-			LogListView.ItemsSource ??= new List<string>();
-			var logList = (List<string>)LogListView.ItemsSource;
-
 			var messageWithTimestamp = $"[{DateTime.Now:HH:mm:ss}] {message}";
-			logList.Add(messageWithTimestamp);
 
-			LogListView.ItemsSource = null; // Reset the ItemsSource to refresh the ListView
-			LogListView.ItemsSource = logList; // Reassign the updated list
+			_logItems.Add(messageWithTimestamp);
+
+			LogListView.ScrollTo(messageWithTimestamp, ScrollToPosition.End, animated: true);
 		});
 	}
 
 	private async void StartDownload(string url, string savePath)
 	{
-		var arguments = $"-t mp4 {url} --paths {savePath}";
+		var arguments = new string[]
+		{
+			"-t", "mp4",
+			url,
+			"--paths", savePath
+		};
 
 		var cancellationTokenSource = new CancellationTokenSource();
 		var cancellationToken = cancellationTokenSource.Token;
@@ -60,6 +66,8 @@ public partial class MainPage : ContentPage
 			{
 				AppendLog(line);
 			}
+
+			AppendLog("Download process completed.\n\n");
 		}, cancellationToken);
 		}
 		catch (Exception ex)

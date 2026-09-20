@@ -11,7 +11,7 @@ public class YtdlpRunner
     // Changed to return an async stream of strings
     public static async IAsyncEnumerable<string> RunYtdlpAsync(
         string filePath,
-        string arguments = "",
+        IEnumerable<string> arguments,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         if (!File.Exists(filePath))
@@ -22,12 +22,16 @@ public class YtdlpRunner
         var startInfo = new ProcessStartInfo
         {
             FileName = filePath,
-            Arguments = arguments,
             CreateNoWindow = true, // Set to true to prevent popup windows
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true, // yt-dlp often writes status updates here
         };
+
+        foreach (var arg in arguments)
+        {
+            startInfo.ArgumentList.Add(arg);
+        }
 
         using var process = new Process { StartInfo = startInfo };
 
