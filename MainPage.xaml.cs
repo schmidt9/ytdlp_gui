@@ -8,6 +8,19 @@ public partial class MainPage : ContentPage
 	public MainPage()
 	{
 		InitializeComponent();
+		SetupUI();
+	}
+
+	private void SetupUI()
+	{
+		UrlEntry.Text = AppSettings.URL;
+		SavePathEntry.Text = AppSettings.SavePath;
+	}
+
+	private void SaveSettings()
+	{
+		AppSettings.URL = UrlEntry.Text;
+		AppSettings.SavePath = SavePathEntry.Text;
 	}
 
 	private void OnStartDownloadClicked(object sender, EventArgs e)
@@ -16,6 +29,8 @@ public partial class MainPage : ContentPage
 		{
 			return;
 		}
+
+		SaveSettings();
 	}
 
 	private void OnSelectSavePathClicked(object sender, EventArgs e)
@@ -56,11 +71,12 @@ public partial class MainPage : ContentPage
 
         if (result.IsSuccessful)
         {
-            // Путь к выбранной папке
             var folderPath = result.Folder.Path;
 
-			SavePathEntry.Text = folderPath; // Устанавливаем путь в Entry
-        }
+			SavePathEntry.Text = folderPath;
+
+			SaveSettings();
+		}
 	}
 }
 
