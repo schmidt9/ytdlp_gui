@@ -54,7 +54,7 @@ public partial class MainPage : ContentPage
 		var exeDirectory = AppContext.BaseDirectory;
 		AppendLog($"Executable directory: {exeDirectory}");
 
-		var ytdlpPath = Path.Combine([exeDirectory, "ytdlp_bin", "yt-dlp.exe"]);
+		var ytdlpPath = Path.Combine([exeDirectory, "ytdlp", "yt-dlp.exe"]);
 
 		AppendLog($"Running yt-dlp executable at: '{ytdlpPath}' with arguments: '{string.Join(" ", arguments)}'");
 
