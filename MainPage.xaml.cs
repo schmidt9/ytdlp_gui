@@ -126,7 +126,7 @@ public partial class MainPage : ContentPage
 	{
 		if (string.IsNullOrWhiteSpace(UrlEntry.Text))
 		{
-			DisplayAlert("Error", "Please enter a valid YouTube URL.", "OK");
+			DisplayAlert("Error", "Please enter a valid URL", "OK");
 			return false;
 		}
 
