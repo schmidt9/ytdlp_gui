@@ -78,3 +78,5 @@ Get-ChildItem -LiteralPath $OutputDir -Directory | ForEach-Object {
 Write-Host
 Write-Host "[SUCCESS] Cleanup finished ($removed folder(s) removed)."
 Write-Host "Final binaries are at: $OutputDir"
+
+Read-Host -Prompt "Press Enter to exit"

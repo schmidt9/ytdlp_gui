@@ -41,7 +41,7 @@
                     SemanticProperties.Hint="Start the download process"
                     Clicked="OnStartDownloadClicked"
                     HorizontalOptions="Start"/>
-                
+
                 <ActivityIndicator
                     x:Name="DownloadActivityIndicator"
                     IsRunning="False"
@@ -55,7 +55,17 @@
         <!-- Нижняя часть (занимает всё оставшееся место '*'): Теперь ListView имеет границы и скроллится! -->
         <ListView Grid.Row="1"
                   x:Name="LogListView"
-                  HasUnevenRows="True"/>
+                  HasUnevenRows="True"
+                  SelectionMode="None">
+            <FlyoutBase.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Text="Copy log"
+                                    Clicked="OnLogListViewCopyAllClicked"/>
+                    <MenuFlyoutItem Text="Clear log"
+                                    Clicked="OnLogListViewClearAllClicked"/>
+                </MenuFlyout>
+            </FlyoutBase.ContextFlyout>
+        </ListView>
     </Grid>
 
 </ContentPage>
