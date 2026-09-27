@@ -17,6 +17,7 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 		SetupUI();
+		LogYtdlpInfo();
 	}
 
 	private void SetupUI()
@@ -44,6 +45,40 @@ public partial class MainPage : ContentPage
 		});
 	}
 
+	private string GetYtdlpPath()
+	{
+		var exeDirectory = AppContext.BaseDirectory;
+		var ytdlpPath = Path.Combine(exeDirectory, "ytdlp", "yt-dlp.exe");
+		return ytdlpPath;
+	}
+
+	private async void LogYtdlpInfo()
+	{
+		try
+		{
+			var path = GetYtdlpPath();
+			var arguments = new List<string> { "--version" };
+
+			await Task.Run(async () =>
+		{
+			var versionOutput = new List<string>();
+
+			await foreach (var line in YtdlpRunner.RunYtdlpAsync(path, arguments))
+			{
+				versionOutput.Add(line);
+			}
+
+			AppendLog($"Using yt-dlp executable at: '{path}', version: {string.Join(" ", versionOutput)}");
+		});
+
+		}
+		catch (Exception ex)
+		{
+			var message = $"Failed to get yt-dlp version: {ex.Message}";
+			AppendLog(message);
+		}
+	}
+
 	private async void StartDownload(string url, string savePath)
 	{
 		var arguments = new List<string>
@@ -56,14 +91,11 @@ public partial class MainPage : ContentPage
 		_cancellationTokenSource = new CancellationTokenSource();
 		var cancellationToken = _cancellationTokenSource.Token;
 
-		var exeDirectory = AppContext.BaseDirectory;
-		AppendLog($"Executable directory: {exeDirectory}");
-
-		var ytdlpPath = Path.Combine([exeDirectory, "ytdlp", "yt-dlp.exe"]);
+		var ytdlpPath = GetYtdlpPath();
 
 		AppendLog($"Starting download for URL: {url}");
 
-		AppendLog($"Running yt-dlp executable at: '{ytdlpPath}' with arguments: '{string.Join(" ", arguments)}'");
+		AppendLog($"Running yt-dlp with arguments: '{string.Join(" ", arguments)}'");
 
 		try
 		{
